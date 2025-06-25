@@ -1,0 +1,2 @@
+# maestranza-inventario
+Prototipo funcional 

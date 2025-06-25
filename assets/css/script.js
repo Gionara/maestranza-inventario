@@ -47,10 +47,10 @@ function cargar(pantalla) {
       <div class="alerta aviso">📉 6 productos con stock bajo</div>
       <div class="alerta critico">⏳ 3 productos próximos a vencer</div>
       <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-        <div style="flex: 1; min-width: 300px;"><canvas id="graf1"></canvas></div>
-        <div style="flex: 1; min-width: 300px;"><canvas id="graf2"></canvas></div>
-        <div style="flex: 1; min-width: 300px;"><canvas id="graf3"></canvas></div>
-        <div style="flex: 1; min-width: 300px;"><canvas id="graf4"></canvas></div>
+        <div style="flex: 1; min-width: 300px; max-width: 500px; height-min: 300px; justify-self: stretch;  "><canvas id="graf1"></canvas></div>
+        <div style="flex: 1; min-width: 300px; max-width: 500px; height-min: 300px; justify-self: stretch; "><canvas id="graf2"></canvas></div>
+        <div style="flex: 1; min-width: 300px; max-width: 500px; height-min: 300px; justify-self: stretch; "><canvas id="graf3"></canvas></div>
+        <div style="flex: 1; min-width: 300px; max-width: 500px; height-min: 300px; justify-self: stretch; "><canvas id="graf4"></canvas></div>
       </div>`;
     setTimeout(() => {
       new Chart(document.getElementById('graf1'), {

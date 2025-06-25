@@ -101,21 +101,9 @@ function cargar(pantalla) {
     }, 200);
   }
 
-  else if (pantalla === 'productos') {
+  else if (pantalla === 'inventario') {
     contenido.innerHTML = `
-      <h2>Gestión de Productos</h2>
-      <form onsubmit="event.preventDefault(); mostrarToast('Producto registrado con éxito'); cargar('productos');">
-        <label>Nombre del producto:</label><input type="text" required>
-        <label>Número de serie:</label><input type="text" required>
-        <label>Categoría:</label>
-        <select><option>Lubricante</option><option>Herramienta</option><option>Repuesto</option><option>Consumible</option></select>
-        <label>Ubicación:</label><input type="text" required>
-        <label>Proveedor:</label><input type="text" required>
-        <label>Precio de compra:</label><input type="number" required>
-        <label>Descripción:</label><textarea rows="3"></textarea>
-        <button type="submit">Registrar Producto</button>
-      </form>
-      <h3 style="margin-top:40px;">Inventario Actual</h3>
+       <h3 style="margin-top:40px;">Inventario Actual</h3>
       <label>Filtrar por categoría:</label>
       <select id="filtroCategoria" onchange="filtrarProductos()">
         <option value="todos">Todos</option>
@@ -152,6 +140,22 @@ function cargar(pantalla) {
         </tbody>
       </table>
       <button onclick="mostrarToast('Inventario exportado correctamente')">📁 Exportar Inventario</button>`;
+  }
+
+  else if (pantalla === 'productos') {
+    contenido.innerHTML = `
+      <h2>Gestión de Productos</h2>
+      <form onsubmit="event.preventDefault(); mostrarToast('Producto registrado con éxito'); cargar('productos');">
+        <label>Nombre del producto:</label><input type="text" required>
+        <label>Número de serie:</label><input type="text" required>
+        <label>Categoría:</label>
+        <select><option>Lubricante</option><option>Herramienta</option><option>Repuesto</option><option>Consumible</option></select>
+        <label>Ubicación:</label><input type="text" required>
+        <label>Proveedor:</label><input type="text" required>
+        <label>Precio de compra:</label><input type="number" required>
+        <label>Descripción:</label><textarea rows="3"></textarea>
+        <button type="submit">Registrar Producto</button>
+      </form>`;
   }
 
   else if (pantalla === 'alertas') {

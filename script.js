@@ -12,7 +12,7 @@ function cargar(pantalla) {
 
   switch (pantalla) {
     case 'dashboard':
-      contenido.innerHTML = \`
+      contenido.innerHTML = `
         <h2>Dashboard de Inicio</h2>
         <div class="alerta aviso">3 productos con stock bajo</div>
         <div class="alerta critico">1 producto vencido</div>

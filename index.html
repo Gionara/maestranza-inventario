@@ -12,18 +12,7 @@
     <img src="assets/img/logo.png" alt="Logo Maestranzas Unidos" class="logo" />
     <h1>Maestranzas Unidos - Sistema de Control de Inventario</h1>
   </header>
-
-  <div id="login">
-    <h2>Iniciar Sesión</h2>
-    <select id="rol" onchange="iniciar()">
-      <option value="">Seleccione rol</option>
-      <option value="admin">Administrador</option>
-      <option value="bodega">Usuario Bodega</option>
-      <option value="auditor">Auditor</option>
-    </select>
-  </div>
-
-  <nav class="sidebar" id="menu" style="display:none">
+  <nav class="sidebar">
     <ul>
       <li><a href="#" onclick="cargar('dashboard')">🏠 Dashboard</a></li>
       <li><a href="#" onclick="cargar('productos')">📦 Productos</a></li>
@@ -37,14 +26,11 @@
       <li><a href="#" onclick="cargar('compras')">🧾 Compras</a></li>
     </ul>
   </nav>
-
   <main id="contenido">
-    <p>Seleccione un rol para comenzar.</p>
+    <h2>Bienvenido</h2>
+    <p>Seleccione una opción del menú para comenzar a trabajar.</p>
   </main>
-
   <footer>Versión prototipo - Maestranzas Unidos S.A. ©2025</footer>
-  <div id="toast" class="toast"></div>
-
   <script src="script.js"></script>
 </body>
 </html>

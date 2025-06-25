@@ -9,24 +9,44 @@ function mostrarToast(mensaje) {
 
 function cargar(pantalla) {
   const contenido = document.getElementById('contenido');
-
   switch (pantalla) {
     case 'dashboard':
       contenido.innerHTML = `
-        <h2>Dashboard de Inicio</h2>
+        <h2>Dashboard</h2>
         <div class="alerta aviso">3 productos con stock bajo</div>
         <div class="alerta critico">1 producto vencido</div>
-        <canvas id="graficoStock" width="400" height="200"></canvas>
-      \`;
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+          <div style="flex: 1; min-width: 300px;">
+            <canvas id="graficoStock" height="200"></canvas>
+          </div>
+          <div style="flex: 1; min-width: 300px;">
+            <canvas id="graficoConsumo" height="200"></canvas>
+          </div>
+        </div>
+      `;
       setTimeout(() => {
         new Chart(document.getElementById('graficoStock'), {
           type: 'bar',
           data: {
-            labels: ['Tornillos', 'Filtros', 'Lubricantes', 'Rodamientos'],
+            labels: ['Lubricantes', 'Repuestos', 'Herramientas'],
             datasets: [{
-              label: 'Stock disponible',
-              data: [120, 60, 15, 30],
-              backgroundColor: ['#3498db', '#e67e22', '#e74c3c', '#2ecc71']
+              label: 'Stock por categoría',
+              data: [100, 50, 75],
+              backgroundColor: ['#3498db', '#2ecc71', '#f1c40f']
+            }]
+          },
+          options: { responsive: true }
+        });
+        new Chart(document.getElementById('graficoConsumo'), {
+          type: 'line',
+          data: {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+            datasets: [{
+              label: 'Consumo mensual (unidades)',
+              data: [40, 60, 35, 70, 55, 80],
+              fill: false,
+              borderColor: '#e74c3c',
+              tension: 0.1
             }]
           },
           options: { responsive: true }
@@ -34,132 +54,116 @@ function cargar(pantalla) {
       }, 100);
       break;
 
-    case 'productos':
-      contenido.innerHTML = \`
-        <h2>Gestión de Productos</h2>
-        <h3>Registrar Producto</h3>
-        <form onsubmit="event.preventDefault(); mostrarToast('Producto registrado con éxito'); cargar('productos');">
-          <label>Nombre del producto:</label><input type="text" required>
-          <label>Número de serie:</label><input type="text" required>
-          <label>Categoría:</label>
-          <select><option>Lubricante</option><option>Herramienta</option><option>Repuesto</option></select>
-          <label>Ubicación:</label><input type="text" required>
-          <label>Proveedor:</label><input type="text" required>
-          <label>Precio de compra:</label><input type="number" required>
-          <label>Descripción:</label><textarea rows="3"></textarea>
-          <button type="submit">Registrar Producto</button>
-        </form>
-        <h3 style="margin-top:40px;">Inventario Actual</h3>
-        <label>Filtrar por categoría:</label>
-        <select id="filtroCategoria" onchange="filtrarProductos()">
-          <option value="todos">Todos</option>
-          <option value="Lubricante">Lubricante</option>
-          <option value="Herramienta">Herramienta</option>
-          <option value="Repuesto">Repuesto</option>
-        </select>
-        <table id="tablaInventario">
-          <thead>
-            <tr><th>Nombre</th><th>Categoría</th><th>Stock</th><th>Estado</th><th>Ubicación</th></tr>
-          </thead>
-          <tbody>
-            <tr data-cat="Lubricante"><td>Aceite 5W-30</td><td>Lubricante</td><td>6</td><td>Crítico</td><td>Bodega Central</td></tr>
-            <tr data-cat="Herramienta"><td>Llave Inglesa</td><td>Herramienta</td><td>25</td><td>Normal</td><td>Estante B2</td></tr>
-            <tr data-cat="Repuesto"><td>Filtro de aire</td><td>Repuesto</td><td>4</td><td>Crítico</td><td>Bodega Norte</td></tr>
-          </tbody>
-        </table>
-        <button onclick="mostrarToast('Inventario exportado correctamente')">📁 Exportar Inventario</button>
-      \`;
-      break;
-
     case 'movimientos':
-      contenido.innerHTML = \`
+      contenido.innerHTML = `
         <h2>Movimientos de Inventario</h2>
-        <table>
-          <thead><tr><th>Fecha</th><th>Tipo</th><th>Producto</th><th>Cantidad</th><th>Observación</th></tr></thead>
-          <tbody>
-            <tr><td>2025-06-21</td><td>Entrada</td><td>Aceite 5W-30</td><td>20</td><td>Compra mensual</td></tr>
-            <tr><td>2025-06-22</td><td>Salida</td><td>Filtro de aire</td><td>5</td><td>Uso en Planta</td></tr>
-          </tbody>
+        <button onclick="mostrarFormularioMovimiento()">➕ Registrar Movimiento</button>
+        <div id="formMovimiento" style="display:none; margin-top: 20px;">
+          <form onsubmit="event.preventDefault(); mostrarToast('Movimiento registrado'); cargar('movimientos');">
+            <label>Fecha:</label><input type="date" required>
+            <label>Tipo:</label>
+            <select required><option>Entrada</option><option>Salida</option><option>Devolución</option><option>Transferencia</option></select>
+            <label>Producto:</label><input type="text" required>
+            <label>Cantidad:</label><input type="number" required>
+            <label>Observación:</label><textarea></textarea>
+            <button type="submit">Guardar</button>
+          </form>
+        </div>
+        <table><thead><tr><th>Fecha</th><th>Tipo</th><th>Producto</th><th>Cantidad</th><th>Observación</th></tr></thead>
+        <tbody><tr><td>2025-06-23</td><td>Entrada</td><td>Filtro</td><td>10</td><td>Compra regular</td></tr></tbody>
         </table>
-      \`;
-      break;
-
-    case 'alertas':
-      contenido.innerHTML = \`
-        <h2>Alertas de Stock y Vencimientos</h2>
-        <div class="alerta critico">⚠️ Filtro de aire tiene solo 4 unidades</div>
-        <div class="alerta aviso">⏳ Lubricante 5W-30 vence en 5 días</div>
-      \`;
-      break;
-
-    case 'proveedores':
-      contenido.innerHTML = \`
-        <h2>Gestión de Proveedores</h2>
-        <table>
-          <thead><tr><th>Nombre</th><th>Contacto</th><th>Teléfono</th><th>Email</th></tr></thead>
-          <tbody>
-            <tr><td>PetroLube S.A.</td><td>Carla Mella</td><td>+56 9 1234 5678</td><td>ventas@petrolube.cl</td></tr>
-          </tbody>
-        </table>
-      \`;
-      break;
-
-    case 'reportes':
-      contenido.innerHTML = \`
-        <h2>Reportes Personalizados</h2>
-        <p>Filtre por fechas, categoría, o ubicación para generar reportes.</p>
-        <button onclick="mostrarToast('Reporte exportado en PDF')">📄 Exportar PDF</button>
-        <button onclick="mostrarToast('Reporte exportado en Excel')">📊 Exportar Excel</button>
-      \`;
+      `;
       break;
 
     case 'kits':
-      contenido.innerHTML = \`
+      contenido.innerHTML = `
         <h2>Administración de Kits</h2>
-        <p>Kit 1: Lubricante + Filtro</p>
-        <p>Kit 2: Llave Inglesa + Tornillo M10</p>
-      \`;
+        <button onclick="mostrarFormularioKit()">➕ Crear Kit</button>
+        <div id="formKit" style="display:none; margin-top: 20px;">
+          <form onsubmit="event.preventDefault(); mostrarToast('Kit creado'); cargar('kits');">
+            <label>Nombre del Kit:</label><input type="text" required>
+            <label>Componentes:</label><textarea placeholder="Ej: Tornillo x2, Llave x1" required></textarea>
+            <button type="submit">Guardar Kit</button>
+          </form>
+        </div>
+        <ul><li>Kit A: Filtro + Aceite</li><li>Kit B: Llave + Tornillos</li></ul>
+      `;
+      break;
+
+    case 'proveedores':
+      contenido.innerHTML = `
+        <h2>Proveedores</h2>
+        <button onclick="mostrarFormularioProveedor()">➕ Añadir Proveedor</button>
+        <div id="formProveedor" style="display:none; margin-top: 20px;">
+          <form onsubmit="event.preventDefault(); mostrarToast('Proveedor registrado'); cargar('proveedores');">
+            <label>Nombre:</label><input type="text" required>
+            <label>Contacto:</label><input type="text">
+            <label>Email:</label><input type="email">
+            <label>Teléfono:</label><input type="tel">
+            <button type="submit">Guardar</button>
+          </form>
+        </div>
+        <table><thead><tr><th>Nombre</th><th>Contacto</th><th>Email</th></tr></thead>
+        <tbody><tr><td>PetroLube S.A.</td><td>Carla</td><td>ventas@petrolube.cl</td></tr></tbody></table>
+      `;
+      break;
+
+    case 'reportes':
+      contenido.innerHTML = `
+        <h2>Reportes Personalizados</h2>
+        <form onsubmit="event.preventDefault(); mostrarToast('Reporte generado');">
+          <label>Rango de fechas:</label><input type="date"> a <input type="date"><br>
+          <label>Categoría:</label>
+          <select><option>Todas</option><option>Lubricante</option><option>Repuesto</option></select>
+          <label>Ubicación:</label><input type="text" placeholder="Ej: Bodega Central">
+          <button type="submit">Generar Reporte</button>
+        </form>
+      `;
       break;
 
     case 'usuarios':
-      contenido.innerHTML = \`
-        <h2>Gestión de Perfiles y Permisos</h2>
-        <p>Administrador: Acceso total</p>
-        <p>Usuario Bodega: Solo Productos y Movimientos</p>
-      \`;
+      contenido.innerHTML = `
+        <h2>Gestión de Usuarios</h2>
+        <button onclick="mostrarFormularioUsuario()">➕ Añadir Usuario</button>
+        <div id="formUsuario" style="display:none; margin-top: 20px;">
+          <form onsubmit="event.preventDefault(); mostrarToast('Usuario creado'); cargar('usuarios');">
+            <label>Nombre de usuario:</label><input type="text" required>
+            <label>Rol:</label>
+            <select><option>Administrador</option><option>Bodega</option><option>Auditor</option></select>
+            <button type="submit">Registrar</button>
+          </form>
+        </div>
+      `;
       break;
 
     case 'respaldo':
-      contenido.innerHTML = \`
-        <h2>Respaldo y Restauración</h2>
-        <button onclick="mostrarToast('Respaldo generado correctamente')">💾 Generar respaldo</button>
+      contenido.innerHTML = `
+        <h2>Respaldos del Sistema</h2>
         <p>Último respaldo: 2025-06-23 14:00</p>
-      \`;
+        <ul><li>23/06/2025 - 14:00</li><li>22/06/2025 - 11:45</li><li>21/06/2025 - 17:30</li></ul>
+        <button onclick="mostrarToast('Respaldo generado')">💾 Realizar respaldo</button>
+      `;
       break;
 
     case 'compras':
-      contenido.innerHTML = \`
+      contenido.innerHTML = `
         <h2>Órdenes de Compra</h2>
-        <p>Generadas automáticamente al alcanzar stock mínimo.</p>
-        <table>
-          <thead><tr><th>Producto</th><th>Cantidad</th><th>Estado</th></tr></thead>
-          <tbody>
-            <tr><td>Aceite 5W-30</td><td>50</td><td>Pendiente</td></tr>
-          </tbody>
-        </table>
-      \`;
+        <table><thead><tr><th>Producto</th><th>Cantidad</th><th>Estado</th></tr></thead>
+        <tbody><tr><td>Filtro de aire</td><td>50</td><td>Pendiente</td></tr></tbody></table>
+      `;
       break;
   }
 }
 
-function filtrarProductos() {
-  const categoria = document.getElementById("filtroCategoria").value;
-  const filas = document.querySelectorAll("#tablaInventario tbody tr");
-  filas.forEach(fila => {
-    if (categoria === "todos" || fila.dataset.cat === categoria) {
-      fila.style.display = "";
-    } else {
-      fila.style.display = "none";
-    }
-  });
+function mostrarFormularioMovimiento() {
+  document.getElementById("formMovimiento").style.display = "block";
+}
+function mostrarFormularioKit() {
+  document.getElementById("formKit").style.display = "block";
+}
+function mostrarFormularioProveedor() {
+  document.getElementById("formProveedor").style.display = "block";
+}
+function mostrarFormularioUsuario() {
+  document.getElementById("formUsuario").style.display = "block";
 }
